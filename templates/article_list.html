@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<table>
+  <tbody>
+    {% for article in object_list %}
+    <tr>
+      <th>{{ article.title }}</th>
+      <td>{{ article.content }}</td>
+      <td>最終更新<time>{{ article.update_at }}</time></td>
+      <td>投稿日時<time>{{ article.create_at }}</time></td>
+      <td><a href="{% url 'articles:article_detail' article.pk %}">詳細</a</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<button><a href="{% url 'articles:article_create' %}">ブログ追加</a></button>
+{% endblock %}

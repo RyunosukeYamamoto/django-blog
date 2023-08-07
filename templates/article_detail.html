@@ -1,0 +1,6 @@
+{% extends 'base.html' %} {% block content %}
+<h1>{{ object.title }}</h1>
+<p>{{ object.content }}</p>
+<div>最終更新<time>{{ object.update_at }}</time></div>
+<div>投稿日時<time>{{ object.create_at }}</time></div>
+{% endblock %}
