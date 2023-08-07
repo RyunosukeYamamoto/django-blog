@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
-<form method="POST">
+<form method="POST" action="{% url 'articles:article_confirm' %}">
   {% csrf_token %} {{ form.as_p }}
-  <input type="submit" value="投稿" />
+  <input type="submit" name="confirm" value="投稿" />
 </form>
 {% endblock %}

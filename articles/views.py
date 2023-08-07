@@ -1,23 +1,33 @@
-from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.shortcuts import render, redirect
+from django.views.generic.base import View
+from django.views.generic.edit import CreateView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Articles
 from django.urls import reverse_lazy
 from datetime import datetime
+from . import forms
 
 
-class ArticleCreateView(CreateView):
-    model = Articles
+class ArticleCreateView(FormView):
     template_name = "article_create.html"
-    fields = ["title", "content"]
+    form_class = forms.ArticleForm
 
-    success_url = reverse_lazy("articles:article_list")
 
-    def form_valid(self, form):
-        form.instance.create_at = datetime.now()
-        form.instance.update_at = datetime.now()
-        return super().form_valid(form)
+class ArticleCreateConfirmView(View):
+    def post(self, request, *args, **kwargs):
+        form = forms.ArticleForm(request.POST or None)
+        context = {"form": form}
+        if "confirm" in request.POST:
+            return render(request, "article_confirm.html", context)
+        if "back" in request.POST:
+            return render(request, "article_create.html", context)
+        if "create" in request.POST:
+            form.save()
+            return redirect("home")
+        else:
+            # 正常動作ではここは通らない。エラーページへの遷移でも良い
+            return redirect("home")
 
 
 class ArticleListView(ListView):
